@@ -1,0 +1,49 @@
+{
+  "name": "wishlistdoc-mcp",
+  "version": "1.0.0",
+  "description": "Official Model Context Protocol (MCP) server for WishlistDoc (https://wishlistdoc.com) - Steam store page audit, sales cone forecasting, and indie game benchmarks for AI agents.",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "wishlistdoc-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "steam",
+    "gamedev",
+    "indiedev",
+    "sales-forecasting",
+    "steamworks",
+    "wishlists",
+    "wishlistdoc",
+    "claude",
+    "cursor"
+  ],
+  "author": "WishlistDoc Team <contact@wishlistdoc.com> (https://wishlistdoc.com)",
+  "homepage": "https://wishlistdoc.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiongxingzhe/wishlistdoc-mcp.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}
