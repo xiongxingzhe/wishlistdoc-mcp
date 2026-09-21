@@ -134,13 +134,43 @@ Once configured in Claude or Cursor, you can ask questions naturally:
 
 ---
 
-## 🔬 Empirical Methodology
+## 🔬 Empirical Methodology & Calculation Formulas
 
-All models implemented in **WishlistDoc MCP** are grounded in:
-1. **Simon Carless / GameDiscoverCo** empirical Steam game discovery research.
-2. **Steamworks Documentation** recommendations for store metadata and regional localization.
-3. **WishlistDoc 270-Day Half-Life Decay Equation:** Accounts for the decaying purchase intent of older wishlists over time:
-   $$\text{Effective Wishlists} = \sum W_i \cdot e^{-\lambda (t - t_i)}$$
+All diagnostic algorithms and forecasting cones implemented in **WishlistDoc MCP** run directly on the local Node.js engine using transparent, reproducible statistical formulas:
+
+### 1. Base Conversion Rates by Genre ($C_{\text{base}}$)
+Empirically calibrated from GameDiscoverCo dataset (Simon Carless) and Steamworks cohort analyses:
+- **RPG / Turn-Based / Grand Strategy:** $16.0\%$
+- **Action / Roguelite / Shooter:** $13.0\%$
+- **Simulation / Colony / Tycoon:** $12.0\%$
+- **Horror / Atmospheric Survival:** $14.0\%$
+- **Casual / Narrative / Logic Puzzle:** $8.5\%$
+
+### 2. Algorithmic Store Multiplier Matrix ($M_{\text{total}}$)
+Accounts for Steam recommendation engine behavior and shopper conversion friction:
+$$M_{\text{total}} = M_{\text{lang}} \times M_{\text{demo}} \times M_{\text{price}} \times M_{\text{vis}}$$
+- **Localization ($M_{\text{lang}}$):** $1.10\times$ ($\ge 12$ languages including EFIGS + CJK), $0.85\times$ ($\le 5$ languages), $1.0\times$ (standard).
+- **Playable Demo ($M_{\text{demo}}$):** $1.0\times$ with active demo (Next Fest eligible), $0.90\times$ without demo (conversion drag).
+- **Price Resistance ($M_{\text{price}}$):** $1.20\times$ ($<\$9.99$), $1.0\times$ ($\$10-\$24.99$), $0.75\times$ ($>\$25.00$ high barrier).
+- **Visual Impact ($M_{\text{vis}}$):** $1.05\times$ ($\ge 1$ gameplay trailer + $\ge 5$ screenshots).
+
+### 3. P10 / P50 / P90 Sales Cone Confidence Intervals
+- **P50 (Median Benchmark):**
+  $$\text{Sales}_{W1, P50} = \max\left(\text{round}(W_{\text{eff}} \times C_{\text{base}} \times M_{\text{total}}), 20\right)$$
+- **P10 (Pessimistic Floor - 90% Probability Above):**
+  $$\text{Sales}_{W1, P10} = \max\left(\text{round}(\text{Sales}_{W1, P50} \times 0.40), 5\right)$$
+- **P90 (Viral Breakout - 10% Probability Ceiling):**
+  $$\text{Sales}_{W1, P90} = \max\left(\text{round}(\text{Sales}_{W1, P50} \times 2.50), 50\right)$$
+- **Year-1 Lifetime Gross Revenue:**
+  $$\text{Revenue}_{\text{Year 1}} = \text{Sales}_{W1} \times \text{Price}_{\text{USD}} \times 3.2$$
+  *(where $3.2\times$ represents the empirical median multiplier from Week-1 sales to Year-1 total gross volume across Steam indies).*
+
+### 4. Wishlist Decay Equation
+Older wishlists experience natural interest decay. The 270-day half-life decay function computes effective purchase-intent volume:
+$$W_{\text{eff}} = \sum_{i} W_i \cdot e^{-\lambda (t - t_i)}, \quad \lambda = \frac{\ln(2)}{270} \approx 0.002568 \text{ day}^{-1}$$
+
+### 5. Data Privacy & Zero Lock-in
+The MCP server communicates directly with Steam's public store API (`store.steampowered.com/api/appdetails`) and WishlistDoc's edge cache. All calculation formulas are executed locally within the MCP process with zero data retention.
 
 ---
 
